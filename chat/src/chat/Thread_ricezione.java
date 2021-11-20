@@ -7,6 +7,7 @@ package chat;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -20,7 +21,7 @@ public class Thread_ricezione extends Thread{
     private Timer timer;
 
     public Thread_ricezione(Condivisa c) {
-         gm = new Gestore_messaggio();
+         gm = new Gestore_messaggio(c);
          collegato = false;
          in_attesa = false;
          cond = c;
@@ -32,19 +33,28 @@ public class Thread_ricezione extends Thread{
         while(true){
             Messaggio messaggio = gm.ricevi();
             if(!collegato && !in_attesa && messaggio.getOperazione().equals("a")){
-                gm.invia("y", "Dippolito");
-                in_attesa = true;
-                timer.start();
+                int dialogResult = JOptionPane.showConfirmDialog (null, "Vuoi parlare con " + messaggio.getData() + "?","Warning", JOptionPane.YES_NO_OPTION);
+                if (dialogResult == JOptionPane.YES_OPTION){
+                    gm.invia("y", "Dippolito");
+                    in_attesa = true;
+                    timer.start();
+                    cond.destinatario.setIndirizzo(messaggio.getMittente());
+                    cond.destinatario.setNome(messaggio.getData());
+                }
+                else if(dialogResult == JOptionPane.NO_OPTION){
+                    gm.invia("n", "");
+                }
+                
             }else if(collegato || in_attesa){
                 gm.invia("n", "");
             }
             
             if(!timer.isTerminato()){
-                if(in_attesa && messaggio.getOperazione().equals("y")){
+                if(messaggio.getMittente().equals(cond.destinatario.getIndirizzo()) && in_attesa && messaggio.getOperazione().equals("y")){
                 in_attesa = false;
                 collegato = true;
                 }
-                if(in_attesa && messaggio.getOperazione().equals("n")){
+                if(messaggio.getMittente().equals(cond.destinatario.getIndirizzo()) && in_attesa && messaggio.getOperazione().equals("n")){
                 in_attesa = false;
                 collegato = false;
                 }
@@ -53,12 +63,13 @@ public class Thread_ricezione extends Thread{
                 in_attesa = false;
             }
             
-            if(collegato && messaggio.getOperazione().equals("m")){
+            if(messaggio.getMittente().equals(cond.destinatario.getIndirizzo()) && collegato && messaggio.getOperazione().equals("m")){
                 cond.buffer_messaggio.setData(messaggio.getData());
             }
             
-            if(collegato && messaggio.getOperazione().equals("c")){
+            if(messaggio.getMittente().equals(cond.destinatario.getIndirizzo()) && collegato && messaggio.getOperazione().equals("c")){
                 collegato = false;
+                cond.destinatario.setIndirizzo(null);
             }
             
             if(!collegato && messaggio.getOperazione().equals("m")){

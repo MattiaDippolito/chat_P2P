@@ -9,20 +9,14 @@ import java.net.InetAddress;
 
 /**
  *
- * @author HP
+ * @author dippolito_mattia
  */
 public class Destinatario {
     private InetAddress indirizzo;
-    private int porta;
+    private String nome;
 
     public Destinatario() {
         this.indirizzo = null;
-        this.porta = -1;
-    }
-
-    public Destinatario(InetAddress indirizzo, int porta) {
-        this.indirizzo = indirizzo;
-        this.porta = porta;
     }
 
     public InetAddress getIndirizzo() {
@@ -33,11 +27,11 @@ public class Destinatario {
         this.indirizzo = indirizzo;
     }
 
-    public int getPorta() {
-        return porta;
+    public String getNome() {
+        return nome;
     }
 
-    public void setPorta(int porta) {
-        this.porta = porta;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 }

@@ -19,16 +19,16 @@ import java.util.logging.Logger;
 public class Gestore_messaggio {
     private DatagramSocket server;
     private byte[] buffer;
-    private Destinatario destinatario;
+    private Condivisa cond;
 
-    public Gestore_messaggio(){
+    public Gestore_messaggio(Condivisa cond){
         try {
             server = new DatagramSocket(12345);
         } catch (SocketException ex) {
             Logger.getLogger(Gestore_messaggio.class.getName()).log(Level.SEVERE, null, ex);
         }
         buffer = new byte[1500];
-        destinatario = new Destinatario();
+        this.cond = cond;
     }
     
     public Messaggio ricevi(){
@@ -39,23 +39,23 @@ public class Gestore_messaggio {
             Logger.getLogger(Gestore_messaggio.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        destinatario.setIndirizzo(packet.getAddress());
-        destinatario.setPorta(packet.getPort());
-        
         byte[] dataReceived = packet.getData();
         String messaggioRicevuto = new String(dataReceived, 0, packet.getLength());
         String[] campi = messaggioRicevuto.split(";");
         Messaggio messaggio = new Messaggio(campi[0],campi[1]);
+        
+        messaggio.setMittente(packet.getAddress());
+        
         return messaggio;
     }
     
     public boolean invia(String operazione, String data){
         String risposta = operazione + ";" + data;
         byte[] responseBuffer = risposta.getBytes();
-        if(destinatario.getIndirizzo() != null && destinatario.getPorta() != -1){
+        if(cond.destinatario.getIndirizzo()!=null){
             DatagramPacket responsePacket = new DatagramPacket(responseBuffer, responseBuffer.length);
-            responsePacket.setAddress(destinatario.getIndirizzo());
-            responsePacket.setPort(destinatario.getPorta());
+            responsePacket.setAddress(cond.destinatario.getIndirizzo());
+            responsePacket.setPort(12345);
             try {
                 server.send(responsePacket);
             } catch (IOException ex) {

@@ -5,29 +5,26 @@
  */
 package chat;
 
+import java.util.LinkedList;
+
 /**
  *
  * @author HP
  */
 public class Buffer_messaggio {
-    private String data;
-    private boolean aggiornato;
+    private LinkedList<String> data;
 
     public Buffer_messaggio() {
-        data = "";
-        aggiornato = false;
+        data = new LinkedList<String>();
     }
 
-    synchronized public String getData() {
-        return data;
+    public String getData() {
+        if(data.size()!=0)
+            return data.remove(0);
+        return null;
     }
 
-    synchronized public void setData(String data) {
-        this.data = data;
-        aggiornato = true;
-    }
-
-    public boolean isAggiornato() {
-        return aggiornato;
+    public void setData(String d) {
+        data.add(d);
     }
 }

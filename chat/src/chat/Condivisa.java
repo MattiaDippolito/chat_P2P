@@ -10,9 +10,11 @@ package chat;
  * @author HP
  */
 public class Condivisa {
-    Buffer_messaggio buffer_messaggio;
+    public Buffer_messaggio buffer_messaggio;
+    public Destinatario destinatario;
 
     public Condivisa() {
         this.buffer_messaggio = new Buffer_messaggio();
+        this.destinatario = new Destinatario();
     }
 }
