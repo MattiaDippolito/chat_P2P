@@ -8,7 +8,10 @@ package chat;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.Inet4Address;
+import java.net.InetAddress;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -64,5 +67,21 @@ public class Gestore_messaggio {
             return true;
         }
         return false;
+    }
+    
+    public void connetti(String data, String indirizzo) throws UnknownHostException{
+        //System.out.println("avvio connessione");
+        String risposta = "a;" + data;
+        byte[] responseBuffer = risposta.getBytes();
+        if(cond.destinatario.getIndirizzo()==null && !indirizzo.equals("")){
+            DatagramPacket responsePacket = new DatagramPacket(responseBuffer, responseBuffer.length);
+            responsePacket.setAddress(InetAddress.getByName(indirizzo));
+            responsePacket.setPort(12345);
+            try {
+                server.send(responsePacket);
+            } catch (IOException ex) {
+                Logger.getLogger(Gestore_messaggio.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 }

@@ -3,13 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/F:/Quinta/Java/chat_P2P/chat/src/chat/Destinatario.java</file>
-            <file>file:/F:/Quinta/Java/chat_P2P/chat/src/chat/Gestore_messaggio.java</file>
-            <file>file:/F:/Quinta/Java/chat_P2P/chat/src/chat/Thread_ricezione.java</file>
-            <file>file:/F:/Quinta/Java/chat_P2P/chat/src/chat/Messaggio.java</file>
-            <file>file:/F:/Quinta/Java/chat_P2P/chat/src/chat/Buffer_messaggio.java</file>
-            <file>file:/F:/Quinta/Java/chat_P2P/chat/src/chat/Condivisa.java</file>
-            <file>file:/F:/Quinta/Java/chat_P2P/chat/src/chat/Schermata.java</file>
+            <file>file:/F:/Quinta/Repository/chat_P2P/chat/src/chat/Schermata.java</file>
+            <file>file:/F:/Quinta/Repository/chat_P2P/chat/src/chat/Thread_ricezione.java</file>
+            <file>file:/F:/Quinta/Repository/chat_P2P/chat/src/chat/Gestore_messaggio.java</file>
         </group>
     </open-files>
 </project-private>

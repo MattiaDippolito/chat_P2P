@@ -64,7 +64,7 @@ public class Thread_ricezione extends Thread{
             }
             
             if(messaggio.getMittente().equals(cond.destinatario.getIndirizzo()) && collegato && messaggio.getOperazione().equals("m")){
-                cond.buffer_messaggio.setData(messaggio.getData());
+                cond.buffer_messaggio.setDataRecived(messaggio.getData());
             }
             
             if(messaggio.getMittente().equals(cond.destinatario.getIndirizzo()) && collegato && messaggio.getOperazione().equals("c")){

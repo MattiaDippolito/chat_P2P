@@ -5,17 +5,27 @@
  */
 package chat;
 
+import java.net.UnknownHostException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+
 /**
  *
  * @author dippolito_mattia
  */
 public class Schermata extends javax.swing.JFrame {
-
-    /**
-     * Creates new form Schermata
-     */
+    
+    Condivisa cond;
+    Gestore_messaggio gm;
+    Thread_scrittura ts;
     public Schermata() {
         initComponents();
+        cond = new Condivisa();
+        gm = new Gestore_messaggio(cond);
+        ts = new Thread_scrittura(cond);
+        
+        ts.start();
     }
 
     /**
@@ -32,11 +42,13 @@ public class Schermata extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         txt_indirizzo = new javax.swing.JTextField();
         lbl_nome_destinatario = new javax.swing.JLabel();
-        PanelloChat = new javax.swing.JScrollPane();
         btn_invia = new javax.swing.JButton();
         btn_disconnetti = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         txt_messaggio = new javax.swing.JTextPane();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        pane_chat = new javax.swing.JTextPane();
+        btn_connetti = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -46,13 +58,30 @@ public class Schermata extends javax.swing.JFrame {
 
         lbl_nome_destinatario.setText("Nikname destinatario");
 
-        PanelloChat.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-
         btn_invia.setText("INVIA");
+        btn_invia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_inviaActionPerformed(evt);
+            }
+        });
 
         btn_disconnetti.setText("Disconnetti");
+        btn_disconnetti.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_disconnettiActionPerformed(evt);
+            }
+        });
 
         jScrollPane1.setViewportView(txt_messaggio);
+
+        jScrollPane3.setViewportView(pane_chat);
+
+        btn_connetti.setText("Connetti");
+        btn_connetti.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_connettiActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -61,20 +90,22 @@ public class Schermata extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 542, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btn_invia, javax.swing.GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE))
-                    .addComponent(PanelloChat, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(txt_nome, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(txt_nome, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(lbl_nome_destinatario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btn_connetti, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(txt_indirizzo, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)
@@ -93,18 +124,40 @@ public class Schermata extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lbl_nome_destinatario, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btn_disconnetti))
-                .addGap(18, 18, 18)
-                .addComponent(PanelloChat, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(btn_disconnetti)
+                    .addComponent(btn_connetti))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btn_invia, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE)
+                    .addComponent(btn_invia, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
                     .addComponent(jScrollPane1))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btn_inviaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_inviaActionPerformed
+        String mess = txt_messaggio.getText();
+        cond.buffer_messaggio.setDataSended(mess);
+        //gm.invia("m", mess);
+        txt_messaggio.setText("");
+    }//GEN-LAST:event_btn_inviaActionPerformed
+
+    private void btn_connettiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_connettiActionPerformed
+        try {
+            gm.connetti("Dippolito", txt_indirizzo.getText());
+        } catch (UnknownHostException ex) {
+            Logger.getLogger(Schermata.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        txt_indirizzo.setText("");
+    }//GEN-LAST:event_btn_connettiActionPerformed
+
+    private void btn_disconnettiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_disconnettiActionPerformed
+        gm.invia("c", "");
+    }//GEN-LAST:event_btn_disconnettiActionPerformed
+
 
     /**
      * @param args the command line arguments
@@ -142,15 +195,29 @@ public class Schermata extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JScrollPane PanelloChat;
+    private javax.swing.JButton btn_connetti;
     private javax.swing.JButton btn_disconnetti;
     private javax.swing.JButton btn_invia;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel lbl_nome_destinatario;
+    private javax.swing.JTextPane pane_chat;
     private javax.swing.JTextField txt_indirizzo;
     private javax.swing.JTextPane txt_messaggio;
     private javax.swing.JTextField txt_nome;
     // End of variables declaration//GEN-END:variables
 }
+
+
+
+
+/*
+non so se funziona
+
+non riesco ad usare la paint perchè diventa tutto bianco
+
+il mio nikname è sbagliato dato che non riesco ad impostarlo nel thread ricezione quando devo rispondere
+ad uno che vuole connettersi a me con il nikname che voglio inserire dalla schermata
+*/
