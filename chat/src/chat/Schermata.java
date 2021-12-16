@@ -19,13 +19,16 @@ public class Schermata extends javax.swing.JFrame {
     Condivisa cond;
     Gestore_messaggio gm;
     Thread_scrittura ts;
+    Thread_ricezione tr;
     public Schermata() {
         initComponents();
         cond = new Condivisa();
         gm = new Gestore_messaggio(cond);
         ts = new Thread_scrittura(cond);
+        tr = new Thread_ricezione(cond);
         
         ts.start();
+        tr.start();
     }
 
     /**

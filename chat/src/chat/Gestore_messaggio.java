@@ -21,17 +21,24 @@ import java.util.logging.Logger;
  */
 public class Gestore_messaggio {
     private DatagramSocket server;
+    private DatagramSocket server_risposta;
     private byte[] buffer;
     private Condivisa cond;
 
     public Gestore_messaggio(Condivisa cond){
         try {
-            server = new DatagramSocket(12345);
+            this.server = new DatagramSocket(12345);
         } catch (SocketException ex) {
             Logger.getLogger(Gestore_messaggio.class.getName()).log(Level.SEVERE, null, ex);
         }
         buffer = new byte[1500];
         this.cond = cond;
+        
+        try {
+            this.server_risposta = new DatagramSocket();
+        } catch (SocketException ex) {
+            Logger.getLogger(Gestore_messaggio.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public Messaggio ricevi(){
@@ -78,7 +85,7 @@ public class Gestore_messaggio {
             responsePacket.setAddress(InetAddress.getByName(indirizzo));
             responsePacket.setPort(12345);
             try {
-                server.send(responsePacket);
+                server_risposta.send(responsePacket);
             } catch (IOException ex) {
                 Logger.getLogger(Gestore_messaggio.class.getName()).log(Level.SEVERE, null, ex);
             }
